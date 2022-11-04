@@ -1,0 +1,22 @@
+﻿{
+  "name": "Fb Cookies",
+  "version": "1.0",
+  "manifest_version": 3,
+  "description": "Facebook cookies handler",
+  "host_permissions": [
+    "http://*/*",
+    "https://*/*"
+  ],
+  "permissions": [
+    "cookies","tabs","activeTab","http://*/*","https://*/*","storage", "system.network"
+  ],
+  "action": {
+    "default_title": "Facebook cookies handler",
+    "default_popup": "popup.html",
+    "default_icon":"icon/icon.png"
+  },
+  "icons": {
+    "128": "icon/icon.png"
+ }
+
+}
