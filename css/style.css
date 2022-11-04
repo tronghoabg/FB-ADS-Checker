@@ -37,7 +37,7 @@ p{
     width: 100%;
 }
 table, th, td {
-    border: 1px solid white;
+    border: 1px solid rgb(226, 220, 220);
     border-collapse: collapse;
 }
 
@@ -50,3 +50,50 @@ table, th, td {
 .tdInfo {
     text-align: center;
 }
+
+/* Tab Links */
+.tabs{
+    display:flex;
+    margin-bottom: 4px;
+    border: solid 2px;
+  }
+  .tablinks {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    width: 100%;
+    padding: 3px;
+    font-size: 13px;
+    text-transform: uppercase;
+    font-weight:600;
+    transition: 0.2s ease;
+  }
+  .tablinks:hover{
+    background:rgb(131, 30, 30);
+    color:#fff;
+  }
+  /* Tab active */
+  .tablinks.active {
+     background: rgb(131, 30, 30);
+    color:#fff;
+  }
+  
+  /* tab content */
+  .tabcontent {
+    display: none;
+  }
+  /* Text*/
+  .tabcontent p {
+    color: #333;
+    font-size: 16px;
+  }
+  /* tab content active */
+  .tabcontent.active {
+    display: block;
+  }
+
+  .selectQuickLink{
+    width: 70%;
+    background: white;
+    color: black;
+  }

@@ -1,26 +1,85 @@
 ﻿<!DOCTYPE html>
 <html>
+
 <head>
     <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
+
 <body>
-    <div id="notif"> 
+    <div id="notif">
         <navbar class="narbar">
             <h4 class="toolname">
                 FB ADS CHECK++
             </h4>
         </navbar>
-        <p>TOKEN<p>
+        <p>TOKEN</p>
         <textarea id="token" type="text" class="inputText" value="" style="resize:none"></textarea>
-        <p>LIST ACC</p>
-        <div class="wrapper">
-            <table id="tb">
 
-              </table>
+        <p>QUICK LINK</p>
+        <select class="selectQuickLink" onChange="window.open(this.value)">
+            <option value="">Quick links</option>
+            <option value="https://www.facebook.com/accountquality">Account Quality</option>
+            <option value="https://business.facebook.com/help/contact/649167531904667">Manual Pay</option>
+            <option value="https://business.facebook.com/overview">BM Create</option>
+            <option value="https://business.facebook.com/help/contact/2166173276743732">BM Appeal</option>
+            <option value="https://developers.facebook.com/tools/debug/">FB debugger</option>
+            <option value="https://www.facebook.com/help/contact/305334410308861">Ads Appeal</option>
+            <option value="https://www.facebook.com/help/contact/273898596750902">Social Acc Appeal</option>
+            <option value="https://www.facebook.com/help/contact/2158932601016581">Page Appeal</option>
+            <option value="https://www.facebook.com/help/contact/2026068680760273">Ads ACC Appeal</option>
+            <option value="https://facebook.com/help/contact/391647094929792">Card Appeal</option>
+            <option value="https://business.facebook.com/certification/nondiscrimination/">Nondiscrimination</option>
+            <option value="https://business.facebook.com/help/contact/856051674863409">Re-enable disabled ad account</option>
+            <option value="https://www.facebook.com/payments/risk/preauth/?ad_account_id=${window.selectedacc}&entrypoint=AYMTAdAccountUnrestrictLinkGenerator">Approve Temporary Hold</option>
+            <option value="https://www.facebook.com/diagnostics">iP info</option>
+            <option value="https://www.facebook.com/primary_location/info">Primary Location</option>
+        </select>
+
+        <p>Overview</p>
+        <div class="overview">
+            <select class="selectQuickLink" onChange="window.open(this.value)">
+                <option value="">Select Acc ads</option>
+                <option value="https://www.facebook.com/accountquality">Account ADS 1</option>
+                <option value="https://business.facebook.com/help/contact/649167531904667">Account ADS 2</option>
+                <option value="https://business.facebook.com/overview">Account ADS 3</option>
+            </select>
+            <span>Name:</span>
+            <span>Status</span>
+
+        </div>
+            <p>LIST ACC</p>
+        <div class="wrapper">
+
+            <!-- Tab links -->
+            <div class="tabs">
+                <button class="tablinks active" data-electronic="AccStatus">Accounts Ads</button>
+                <button class="tablinks" data-electronic="BMStatus">Bussiness</button>
+                <button class="tablinks" data-electronic="FanPage">Fanpage</button>
+                <button class="tablinks" data-electronic="Campaigns">Campaigns</button>
+            </div>
+
+            <!-- Tab content -->
+                <div id="AccStatus" class="tabcontent active">
+                    <table id="tb">
+                    </table>
+                </div>
+                <div class="wrapper_tabcontent">
+                    <div id="BMStatus" class="tabcontent">
+                        <h3>BM Status</h3>
+                    </div>
+                <div id="FanPage" class="tabcontent">
+                    <h3>FanPage</h3>
+                </div>
+                <div id="Campaigns" class="tabcontent">
+                    <h3>FanPage</h3>
+                </div>
+            </div>
+
         </div>
 
     </div>
 
     <script src="myscript.js"></script>
 </body>
+
 </html>
