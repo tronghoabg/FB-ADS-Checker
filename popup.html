@@ -1,85 +1,99 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
     <link rel="stylesheet" type="text/css" href="css/style.css">
+    <script type="text/javascript" src="js/jquery-3.6.1.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.js"></script>
 </head>
 
-<body>
-    <div id="notif">
+<body class="preloading">
+    <div class="load">
+        <img src="/icon/loading.gif">
+    </div>
+
+    <div class="maincontent">
         <navbar class="narbar">
             <h4 class="toolname">
                 FB ADS CHECK++
             </h4>
         </navbar>
-        <p>TOKEN</p>
-        <textarea id="token" type="text" class="inputText" value="" style="resize:none"></textarea>
-
-        <p>QUICK LINK</p>
-        <select class="selectQuickLink" onChange="window.open(this.value)">
-            <option value="">Quick links</option>
-            <option value="https://www.facebook.com/accountquality">Account Quality</option>
-            <option value="https://business.facebook.com/help/contact/649167531904667">Manual Pay</option>
-            <option value="https://business.facebook.com/overview">BM Create</option>
-            <option value="https://business.facebook.com/help/contact/2166173276743732">BM Appeal</option>
-            <option value="https://developers.facebook.com/tools/debug/">FB debugger</option>
-            <option value="https://www.facebook.com/help/contact/305334410308861">Ads Appeal</option>
-            <option value="https://www.facebook.com/help/contact/273898596750902">Social Acc Appeal</option>
-            <option value="https://www.facebook.com/help/contact/2158932601016581">Page Appeal</option>
-            <option value="https://www.facebook.com/help/contact/2026068680760273">Ads ACC Appeal</option>
-            <option value="https://facebook.com/help/contact/391647094929792">Card Appeal</option>
-            <option value="https://business.facebook.com/certification/nondiscrimination/">Nondiscrimination</option>
-            <option value="https://business.facebook.com/help/contact/856051674863409">Re-enable disabled ad account</option>
-            <option value="https://www.facebook.com/payments/risk/preauth/?ad_account_id=${window.selectedacc}&entrypoint=AYMTAdAccountUnrestrictLinkGenerator">Approve Temporary Hold</option>
-            <option value="https://www.facebook.com/diagnostics">iP info</option>
-            <option value="https://www.facebook.com/primary_location/info">Primary Location</option>
-        </select>
-
-        <p>Overview</p>
-        <div class="overview">
-            <select class="selectQuickLink" onChange="window.open(this.value)">
-                <option value="">Select Acc ads</option>
-                <option value="https://www.facebook.com/accountquality">Account ADS 1</option>
-                <option value="https://business.facebook.com/help/contact/649167531904667">Account ADS 2</option>
-                <option value="https://business.facebook.com/overview">Account ADS 3</option>
-            </select>
-            <span>Name:</span>
-            <span>Status</span>
-
+        <div class="token">
+            <p style="text-align: left;">TOKEN</p>
+            <textarea id="token" type="text" class="inputText" value="" style="resize:none"></textarea>
         </div>
-            <p>LIST ACC</p>
+
         <div class="wrapper">
 
             <!-- Tab links -->
-            <div class="tabs">
-                <button class="tablinks active" data-electronic="AccStatus">Accounts Ads</button>
-                <button class="tablinks" data-electronic="BMStatus">Bussiness</button>
-                <button class="tablinks" data-electronic="FanPage">Fanpage</button>
-                <button class="tablinks" data-electronic="Campaigns">Campaigns</button>
+            <div class="FacebookManage">
+                <div class="tabs">
+                    <button class="tablinks active" data-electronic="AccStatus">Accounts Ads</button>
+                    <button class="tablinks" data-electronic="BMStatus">Bussiness</button>
+                    <button class="tablinks" data-electronic="FanPage">Fanpage</button>
+                    <button class="tablinks" data-electronic="Campaigns">Tool</button>
+                </div>
             </div>
 
             <!-- Tab content -->
-                <div id="AccStatus" class="tabcontent active">
-                    <table id="tb">
+            <div id="AccStatus" class="tabcontent active">
+                <table class="table table-striped" id="tb">
+                </table>
+            </div>
+            <div class="wrapper_tabcontent">
+                <div id="BMStatus" class="tabcontent">
+                    <table class="table table-striped" id="tbBM">
                     </table>
                 </div>
-                <div class="wrapper_tabcontent">
-                    <div id="BMStatus" class="tabcontent">
-                        <h3>BM Status</h3>
-                    </div>
                 <div id="FanPage" class="tabcontent">
-                    <h3>FanPage</h3>
+                    <table class="table table-striped" id="tbFanPage">
+                    </table>
                 </div>
                 <div id="Campaigns" class="tabcontent">
-                    <h3>FanPage</h3>
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-sm">
+
+                                <div class="form-group" style="text-align: left">
+                                    <label for="exampleInputEmail1">Select account business</label>
+                                    <select class="form-control" id="listBM">
+                                        <option>No account select</option>
+                                    </select>
+                                </div>
+                                <div class="form-group" style="text-align: left">
+                                    <label for="exampleInputPassword1">Select pixel id</label>
+                                    <select class="form-control" id="listPixel">
+                                        <option>No account select</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm">
+                                <div class="form-group">
+                                    <label for="exampleFormControlTextarea1">Input pixel</label>
+                                    <textarea class="form-control" id="listPixelId" rows="3"></textarea>
+                                </div>
+                                <button type="submit" id="btnSharePixe" class="btn btn-primary">Send</button>
+
+                            </div>
+
+                        </div>
+                        <ul id="logsatusSharePixel">
+                        </ul>
+                    </div>
+
+
                 </div>
             </div>
 
         </div>
 
+        <div class="footer">
+            <span class="copyright">copyright @ FB Ads Check++</span>
+        </div>
     </div>
-
-    <script src="myscript.js"></script>
+    <script type="text/javascript" src="js/main.js"></script>
+    <script type="text/javascript" src="js/callapi.js"></script>
 </body>
 
 </html>
