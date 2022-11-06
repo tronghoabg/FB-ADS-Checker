@@ -95,10 +95,18 @@ button:focus {
   overflow: hidden;
   text-align: center;
 }
-
+/* Footer */
+.footercontent select{
+  color: #daddee ;
+  width: 100%;
+  border: solid 1px #daddee;
+  padding: 2px;
+  background: #384959;
+}
 .footer {
-  margin-top: 15px;
-  text-align: right;
+  margin-top: 10px;
+  display: flex;
+  justify-content: space-between;
 }
 
 .copyright {
@@ -107,6 +115,7 @@ button:focus {
   color: #daddee;
 }
 
+/**/
 h4 {
   text-align: center;
   margin-top: 3px;
