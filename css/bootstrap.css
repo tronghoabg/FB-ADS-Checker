@@ -232,7 +232,7 @@ th {
 
 label {
   display: inline-block;
-  margin-bottom: .5rem;
+  margin: 10px 2px 2px 0;
 }
 
 button {
@@ -563,7 +563,7 @@ pre code {
 
 @media (min-width: 576px) {
   .container {
-    max-width: 540px;
+   /* max-width: 540px; */
   }
 }
 
@@ -594,6 +594,7 @@ pre code {
 }
 
 .row {
+  
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -1958,7 +1959,7 @@ pre code {
   display: block;
   width: 100%;
   padding: 0.375rem 0.75rem;
-  font-size: 1rem;
+  font-size: 0.8rem;
   line-height: 1.5;
   color: #495057;
   background-color: #fff;
@@ -2503,14 +2504,14 @@ fieldset:disabled a.btn {
 
 .btn-primary {
   color: #fff;
-  background-color: #007bff;
-  border-color: #007bff;
+  background-color: #123255;
+  border-color: #123255;
 }
 
 .btn-primary:hover {
   color: #fff;
-  background-color: #0069d9;
-  border-color: #0062cc;
+  background-color: #0d427c;
+  border-color: #0d427c;
 }
 
 .btn-primary:focus, .btn-primary.focus {
